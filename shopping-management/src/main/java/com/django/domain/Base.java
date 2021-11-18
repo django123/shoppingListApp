@@ -9,14 +9,17 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @MappedSuperclass
 public class Base implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-
+    @Id
+    @Column(name = "uuid", unique = true)
     private String id;
 
     @Temporal(TemporalType.DATE)
@@ -43,6 +46,7 @@ public class Base implements Serializable {
 
     @PrePersist
     public void prePersist() {
+        id = UUID.randomUUID().toString();
         createdAt = new Date();
         updatedAt = new Date();
         isDeleted = false;
