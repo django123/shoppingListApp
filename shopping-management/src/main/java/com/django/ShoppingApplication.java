@@ -13,6 +13,7 @@ public class ShoppingApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Shopping list app run ......");
+        System.err.println("Shopping list app run ......");
+
     }
 }

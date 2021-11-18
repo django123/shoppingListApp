@@ -9,12 +9,32 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "share")
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 public class Share extends Base{
 
     private String id;
 
     private String shopId;
+
+    public Share() {
+    }
+
+
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
 }

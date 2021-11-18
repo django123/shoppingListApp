@@ -11,9 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+
 @MappedSuperclass
 public class Base implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -43,6 +41,60 @@ public class Base implements Serializable {
     @Column(name = "deleted")
     @JsonProperty(value = "isDeleted")
     Boolean isDeleted = false;
+
+
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Date getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(Date deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Base() {
+    }
+
+    public Base(String id, Date createdAt, Date updatedAt, Date deletedAt, Boolean isDeleted) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+        this.isDeleted = isDeleted;
+    }
 
     @PrePersist
     public void prePersist() {
