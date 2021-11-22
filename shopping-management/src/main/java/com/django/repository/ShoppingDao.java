@@ -15,4 +15,5 @@ public interface ShoppingDao extends JpaRepository<Shopping, String> {
 
     List<Shopping> findShoppingByArchived(Boolean archived);
     List<Shopping>findShoppingByShared(Boolean shared);
+    List<Shopping> findByUsers_id(Long id);
 }

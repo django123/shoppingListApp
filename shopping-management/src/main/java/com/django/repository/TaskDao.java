@@ -14,6 +14,6 @@ public interface TaskDao extends JpaRepository<Task, String> {
     @Query("SELECT t FROM Task t WHERE t.id = :id AND t.isDeleted = false")
     Task findTaskById(String id);
 
-    @Query("SELECT t FROM Task AS t JOIN t.shopping ts WHERE ts.id = :id ORDER BY t.id desc ")
+    @Query("SELECT t FROM Task t WHERE t.shopping.id = :id ORDER BY t.id desc ")
     List<Task> findAllByShoppingOrderByTaskIdDesc(@Param("id") String id);
 }

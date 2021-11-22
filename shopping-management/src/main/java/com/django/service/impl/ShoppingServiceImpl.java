@@ -1,15 +1,24 @@
 package com.django.service.impl;
 
+import com.django.Repository.UserDao;
 import com.django.domain.Share;
 import com.django.domain.Shopping;
+import com.django.domain.Task;
+import com.django.domain.UserApp;
 import com.django.exceptions.ShoppingException;
 import com.django.repository.ShoppingDao;
+import com.django.repository.TaskDao;
 import com.django.service.ShoppingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -22,13 +31,58 @@ public class ShoppingServiceImpl implements ShoppingService {
     @Autowired
     private  ShoppingDao shoppingDao;
 
+    @Autowired
+    private TaskDao taskDao;
+
+    @Autowired
+    private UserDao userDao;
+
 
 
     @Override
     public List<Shopping> getAllShoppings() {
-
         log.info("Fetching all shoppings");
-        return shoppingDao.findAll();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserApp user = userDao.findUserAppByUsername(auth.getName());
+        List<Shopping> shoppings = shoppingDao.findShoppingByArchived(false);
+        List<Shopping> shoppings1 = shoppingDao.findByUsers_id(user.getId());
+        List<Shopping> shoppingList = new ArrayList<>();
+        for (Shopping shopping : shoppings){
+            for(int i = 0; i<shoppings1.size(); i++){
+                if (shopping.getId().equals(shoppings1.get(i).getId()));{
+                    shoppingList.add(shoppings1.get(i));
+                }
+            }
+        }
+
+        for (Shopping shopping : shoppingList){
+            List<Task> tasks = new ArrayList<>();
+            tasks.addAll(shopping.getTasks());
+            List<Task> tasks1 = new ArrayList<>();
+            for (Task task : tasks){
+                if (task.getStatus() != null && task.getStatus()) tasks1.add(task);
+            }
+            if ((tasks.size() != 0) && tasks.size()==tasks1.size()){
+                shopping.setStatut(true);
+            }
+
+        }
+
+        List<Integer> numbers= new ArrayList<>();
+        for (Shopping shopping : shoppingList){
+            Collection<Task> tasks= shopping.getTasks();
+            Collection<Task> tasks1=new ArrayList<>();
+
+            for (Task task:tasks){
+                if (task.getStatus() != null  && task.getStatus() == true){
+                    tasks1.add(task);
+                }
+            }
+            int nombre = tasks1.size();
+            numbers.add(nombre);
+        }
+
+        return shoppingList;
     }
 
     @Override
@@ -90,13 +144,40 @@ public class ShoppingServiceImpl implements ShoppingService {
     }
 
     @Override
-    public Shopping findAllShoppingArchived() {
-        return null;
+    public Collection<Shopping> findAllShoppingArchived() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserApp user = userDao.findUserAppByUsername(auth.getName());
+        List<Shopping>shoppings = shoppingDao.findShoppingByArchived(true);
+        List<Shopping>shoppings2 = shoppingDao.findByUsers_id(user.getId());
+        List<Shopping>shoppings1 = new ArrayList<>();
+        for(Shopping shopping : shoppings){
+            for (int i=0; i<shoppings2.size(); i++ ){
+                if (shopping.getId().equals(shoppings2.get(i).getId())){
+                    shoppings1.add(shopping);
+                }
+            }
+        }
+        return shoppings1;
     }
 
+
     @Override
-    public Object shoppingShared(Share share, String shareId, String shopId) {
-        return null;
+    public Object sharedShopping() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserApp user = userDao.findUserAppByUsername(authentication.getName());
+        List<Shopping>shoppings1 = shoppingDao.findShoppingByArchived(true);
+        List<Shopping>shoppings2 = shoppingDao.findByUsers_id(user.getId());
+        List<Shopping> shoppings3= new ArrayList<>();
+        for (Shopping shopping: shoppings1){
+            for (int i=0; i<shoppings2.size(); i++){
+                if (shopping.getId().equals(shoppings2.get(i).getId())){
+                    shoppings3.add(shoppings2.get(i));
+
+                }
+            }
+
+        }
+        return shoppings3;
     }
 
 

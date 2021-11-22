@@ -4,6 +4,7 @@ package com.django.service;
 import com.django.domain.Share;
 import com.django.domain.Shopping;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface ShoppingService {
@@ -51,14 +52,11 @@ public interface ShoppingService {
      * gets all Shoppings archived
      * @return  a List containing Shoppings archived
      */
-    Shopping findAllShoppingArchived();
+    Collection<Shopping> findAllShoppingArchived();
+
 
     /**
-     * share shopping with another user of SI
-     * @param share
-     * @param shareId
-     * @param shopId
-     *
-     */
-    Object shoppingShared(Share share, String shareId, String shopId);
+     * shopping shared
+    * */
+    Object sharedShopping();
 }

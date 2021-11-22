@@ -1,9 +1,7 @@
 package com.django.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cache;
 import javax.persistence.*;
@@ -61,13 +59,7 @@ public class Task extends Base{
     public Task() {
     }
 
-    public Task(String id, Date createdAt, Date updatedAt, Date deletedAt, Boolean isDeleted, @NotNull String name, String description, Boolean status, Shopping shopping) {
-        super(id, createdAt, updatedAt, deletedAt, isDeleted);
-        this.name = name;
-        this.description = description;
-        this.status = status;
-        this.shopping = shopping;
-    }
+
 
     @Override
     public String toString() {

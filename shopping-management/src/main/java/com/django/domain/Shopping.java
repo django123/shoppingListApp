@@ -11,13 +11,14 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.hibernate.annotations.Cache;
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "shopping")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class)
 public class Shopping extends Base{
 
 
@@ -37,19 +38,26 @@ public class Shopping extends Base{
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Task>tasks = new HashSet<>();
 
-    public Shopping() {
+    @ManyToMany
+    private Collection<UserApp> users;
+
+
+    public void add(UserApp user){
+        users.add(user);
+
     }
 
-    public Shopping(String id, Date createdAt, Date updatedAt, Date deletedAt, Boolean isDeleted, String name, String comment, Boolean statut, Boolean archived, Boolean shared, String saverName, Date date, Set<Task> tasks) {
-        super(id, createdAt, updatedAt, deletedAt, isDeleted);
-        this.name = name;
-        this.comment = comment;
-        this.statut = statut;
-        this.archived = archived;
-        this.shared = shared;
-        this.saverName = saverName;
-        this.date = date;
-        this.tasks = tasks;
+/*    public void remove(UserApp user){
+        users.remove(user);
+        user.getShoppings().remove(this);
+    }*/
+
+    public Collection<UserApp> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Collection<UserApp> users) {
+        this.users = users;
     }
 
     public String getName() {
